@@ -155,11 +155,19 @@ export default class Constraints {
     if (reverse) {
       inverseValues = conditionAccessor(conditions, reverse);
     }
-    for (var i = 0; i < values.length; i++) {
-      if (constraint.predicate(values[i], inverseValues ? inverseValues[i] : null)) {
+
+    if (!values.length) {
+      if (constraint.predicate(null, inverseValues ? inverseValues[0] : null)) {
         return true;
       }
+    } else {
+      for (var i = 0; i < values.length; i++) {
+        if (constraint.predicate(values[i], inverseValues ? inverseValues[i] : null)) {
+          return true;
+        }
+      }
     }
+
     if (rule.debug) {
       if (constraint.target === 'parentElement') {
         values = values.map((v)=>v[0]);
